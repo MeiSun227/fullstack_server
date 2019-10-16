@@ -1,0 +1,27 @@
+{
+  "name": "fullstack_server",
+  "version": "1.0.0",
+  "description": "fullstack course part 3 ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MeiSun227/fullstack_server.git"
+  },
+  "author": "MeiSun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MeiSun227/fullstack_server/issues"
+  },
+  "homepage": "https://github.com/MeiSun227/fullstack_server#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
