@@ -23,7 +23,7 @@ let persons = [
         "number": "39-23-6423122",
         "id": 4
     }
-    
+
 ]
 
 
@@ -34,6 +34,17 @@ app.get('/', (req, res) => {
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
+app.get('/info', (request, response) => {
+    const totalAmountPersons = persons.length
+    const date = new Date()
+    const resp = `Phonebook has  info of ${totalAmountPersons} people \n ${date}`
+    response.end(resp)
+
+})
+
+
+
+
 
 const PORT = 3001
 app.listen(PORT, () => {
