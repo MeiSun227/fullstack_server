@@ -67,9 +67,19 @@ app.post('/api/persons', (request, response) => {
     const jsonPersonID = Math.floor(Math.random() * Math.floor(100))
     const person = request.body
     person.id = jsonPersonID
-    persons = persons.concat(person)
-    console.log(person)
 
+    const names = persons.map(person => person.name)
+    if (names.includes(person.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    } if (person.name === null || person.number === null ){
+        return response.status(400).json({
+            error: 'name or number can not be empty'
+        })
+    }
+
+    persons = persons.concat(person)
     response.json(person)
 })
 
