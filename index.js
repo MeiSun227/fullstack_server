@@ -3,6 +3,17 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const url = `mongodb+srv://fullstack:${password}@cluster0-yatca.mongodb.net/test?retryWrites=true&w=majority`
+
+mongoose.connect(url, { useNewUrlParser: true })
+const personSchema = new mongoose.Schema({
+    name: String,
+    number: String,
+
+})
+
+const Person = mongoose.model('Person', personSchema)
 
 app.use(cors())
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -10,29 +21,11 @@ morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :response-time ms :body'));
 app.use(express.static('build'))
-let persons = [
-    {
-        "name": "Arto Hellas",
-        "number": "040-123456",
-        "id": 1
-    },
-    {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": 2
-    },
-    {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": 3
-    },
-    {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": 4
-    }
-
-]
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then(persons => {
+      response.json(persons)
+    })
+  })
 
 
 app.get('/api/persons', (req, res) => {
