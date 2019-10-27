@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const url = `mongodb+srv://fullstack:${password}@cluster0-yatca.mongodb.net/test?retryWrites=true&w=majority`
+const Person = require('./models/person')
 
 mongoose.connect(url, { useNewUrlParser: true })
 const personSchema = new mongoose.Schema({
@@ -13,7 +14,7 @@ const personSchema = new mongoose.Schema({
 
 })
 
-const Person = mongoose.model('Person', personSchema)
+
 
 app.use(cors())
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -23,9 +24,9 @@ app.use(morgan(':method :url :status :response-time ms :body'));
 app.use(express.static('build'))
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
-      response.json(persons)
+        response.json(persons)
     })
-  })
+})
 
 
 app.get('/api/persons', (req, res) => {
@@ -62,19 +63,23 @@ app.post('/api/persons', (request, response) => {
     const person = request.body
     person.id = jsonPersonID
 
-    const names = persons.map(person => person.name)
-    if (names.includes(person.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    } if (person.name === null || person.number === null) {
+    // const names = persons.map(person => person.name)
+    // if (names.includes(person.name)) {
+    //     return response.status(400).json({
+    //         error: 'name must be unique'
+    //     })
+    if (person.name === null || person.number === null) {
         return response.status(400).json({
             error: 'name or number can not be empty'
         })
     }
-
-    persons = persons.concat(person)
-    response.json(person)
+    const personModel = new Person({
+        name: person.name,
+        number: person.number,
+    })
+    personModel.save().then(savedPerson => {
+        response.json(savedPerson.toJSON())
+    })
 })
 
 const unknownEndpoint = (request, response) => {
