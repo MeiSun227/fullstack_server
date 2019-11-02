@@ -3,18 +3,8 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
-const url = `mongodb+srv://fullstack:${password}@cluster0-yatca.mongodb.net/test?retryWrites=true&w=majority`
 const Person = require('./models/person')
-
-mongoose.connect(url, { useNewUrlParser: true })
-const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
-
-})
-
-
+require('dotenv').config()
 
 app.use(cors())
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -22,12 +12,12 @@ morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :response-time ms :body'));
 app.use(express.static('build'))
+
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
         response.json(persons)
     })
 })
-
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
@@ -51,11 +41,12 @@ app.get('/api/persons/:id', (request, response) => {
     person ? response.json(person) : response.status(404).end()
 })
 
-app.delete('/api/person/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-
-    response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
@@ -81,6 +72,15 @@ app.post('/api/persons', (request, response) => {
         response.json(savedPerson.toJSON())
     })
 })
+
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
+})
+
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
