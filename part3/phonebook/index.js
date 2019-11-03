@@ -7,10 +7,10 @@ const Person = require('./models/person')
 require('dotenv').config()
 
 app.use(cors())
-morgan.token('body', (req, res) => JSON.stringify(req.body));
+morgan.token('body', (req) => JSON.stringify(req.body))
 
 app.use(bodyParser.json())
-app.use(morgan(':method :url :status :response-time ms :body'));
+app.use(morgan(':method :url :status :response-time ms :body'))
 app.use(express.static('build'))
 
 app.get('/api/persons', (request, response) => {
@@ -19,9 +19,7 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-app.get('/api/persons', (req, res) => {
-    res.json(persons)
-})
+
 app.get('/info', (request, response) => {
     Person.countDocuments({}, (err, count) => {
         const date = new Date()
