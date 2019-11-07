@@ -22,10 +22,15 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   const nameArray = blogs.map((blog) => blog.author)
-  return result = _.head(_(nameArray)
+  const  result = _.head(_(nameArray)
   .countBy()
   .entries()
   .maxBy(_.last));
+  const amount = blogs.filter(blog => blog.author === result).length
+  return {
+    author: result,
+    blogs: amount
+  }
 
 }
 
