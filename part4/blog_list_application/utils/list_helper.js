@@ -22,21 +22,41 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   const nameArray = blogs.map((blog) => blog.author)
-  const  result = _.head(_(nameArray)
-  .countBy()
-  .entries()
-  .maxBy(_.last));
+  const result = _.head(_(nameArray)
+    .countBy()
+    .entries()
+    .maxBy(_.last));
   const amount = blogs.filter(blog => blog.author === result).length
   return {
     author: result,
     blogs: amount
   }
+}
 
+const mostLikes = (blogs) => {
+  const nameArray = blogs.map((blog) => blog.author)
+  const uniqNames = _.uniq(nameArray)
+  let bestAuthor = ""
+  let bestLikes = 0
+
+  uniqNames.forEach(author => {
+    const authorBlogs = blogs.filter(blog => blog.author === author)
+    const authorLikes = _.sumBy(authorBlogs, (blog) => blog.likes)
+    if (authorLikes > bestLikes) {
+      bestAuthor = author
+      bestLikes = authorLikes
+    }
+  })
+  return {
+    author: bestAuthor,
+    likes: bestLikes
+  }
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
