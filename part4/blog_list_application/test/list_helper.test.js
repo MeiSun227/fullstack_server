@@ -15,7 +15,18 @@ describe('total likes', () => {
       title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
       likes: 12
+    },
+
+    {
+      title: "Finlandcocos",
+      author: "Robert C. Martin",
+      likes: 4
+    },
+    {
+      author: "Maye Ikava",
+      likes: 1
     }
+
   ]
   test('dummy returns one', () => {
     const blogs = []
@@ -26,7 +37,7 @@ describe('total likes', () => {
 
   test('when list has only one blog equals the likes of that', () => {
     const result = listHelper.totalLikes(listWithManyBlogs)
-    expect(result).toBe(17)
+    expect(result).toBe(22)
   })
 
   test('when list has more than one blog ', () => {
@@ -36,7 +47,15 @@ describe('total likes', () => {
       likes: 12
     }
     const result = listHelper.favoriteBlog(listWithManyBlogs)
-    console.log(result)
+   
     expect(result).toEqual(answer)
   })
+
+  test('most blogs' , () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs) 
+    expect(result).toBe("Edsger W. Dijkstra")
+
+    
+  })
+
 })
