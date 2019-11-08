@@ -4,6 +4,6 @@ content-type: application/json
 {
     "title": "Finlandcocos",
    "author": "Maya",
-   "url": "www.cocos.fi",
+   "url": "www.cocos.com",
    "likes": "230"
 }
