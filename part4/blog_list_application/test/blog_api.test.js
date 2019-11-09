@@ -104,13 +104,31 @@ test('blog title and url are required', async () => {
 
 test('delete blog by ID', async () => {
   const blogs = await api.get('/api/blogs')
-  console.log(blogs.body[0].id)
+ 
   
   await api.delete(`/api/blogs/${blogs.body[0].id}`)
   .expect(204)
   const newBlogs = await api.get('/api/blogs')
 
   expect(blogs.body.length).toBe(newBlogs.body.length +1)
+})
+
+test('update blog by ID', async () => {
+  const blogs = await api.get('/api/blogs')
+  const newBlog = {
+    url: 'www.siiliconValley.com',
+    author: 'siili suomi',
+    title: 'siilicon valley'
+  }
+  const updatedblog = await api
+    .put(`/api/blogs/${blogs.body[0].id}`)
+    .send(newBlog)
+    .expect(200)
+  
+  expect(updatedblog.body.url).toBe(newBlog.url)
+  expect(updatedblog.body.title).toBe(newBlog.title)
+  expect(updatedblog.body.author).toBe(newBlog.author)
+  
 })
 afterAll(() => {
   mongoose.connection.close()
