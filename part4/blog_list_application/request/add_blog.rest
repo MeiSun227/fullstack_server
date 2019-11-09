@@ -2,7 +2,9 @@ POST  http://localhost:3003/api/blogs
 content-type: application/json
 
 {
-   "title": "Finlandcocos",
-   "author": "Maya",
-   "likes": "230"
+   "title": "Suomi naisten",
+   "author": "Linsdom",
+   "likes": "200",
+   "url" :"www.kokki.fi",
+   "id": "5dc6d8f94e48a544c8e3dac3"
 }
