@@ -1,5 +1,6 @@
 POST  http://localhost:3003/api/blogs
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hbG1pIiwiaWQiOiI1ZGM2ZDhmOTRlNDhhNTQ0YzhlM2RhYzMiLCJpYXQiOjE1NzMzMTUwODZ9.hra9g6ZUSf_dgtO2QoYS1pCvF227ebp_6qnwuEcYlFE
 
 {
    "title": "Suomi naisten",
