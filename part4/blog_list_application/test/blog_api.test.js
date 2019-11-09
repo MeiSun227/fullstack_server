@@ -88,12 +88,10 @@ test('default blog likes are zero', async () => {
 
   const response = await api.get('/api/blogs')
   const contents = response.body.filter(r => r.author === 'siili')
-  console.log(contents)
   expect(contents[0].likes).toBe(0)
 })
 
 test('blog title and url are required', async () => {
-  console.log(initialBlogs)
   const newBlog = {
     url: 'www.example.com',
     author: 'siili'
@@ -104,6 +102,16 @@ test('blog title and url are required', async () => {
     .expect(400)
 })
 
+test('delete blog by ID', async () => {
+  const blogs = await api.get('/api/blogs')
+  console.log(blogs.body[0].id)
+  
+  await api.delete(`/api/blogs/${blogs.body[0].id}`)
+  .expect(204)
+  const newBlogs = await api.get('/api/blogs')
+
+  expect(blogs.body.length).toBe(newBlogs.body.length +1)
+})
 afterAll(() => {
   mongoose.connection.close()
 })
