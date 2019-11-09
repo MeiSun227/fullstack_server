@@ -16,6 +16,7 @@ const initialBlogs = [
   {
     title: "Canonical string reduction",
     author: "Edsger W. Dijkstra",
+    url: 'http://www.example.com/edsger',
     likes: 12
   }
 ]
@@ -37,7 +38,7 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there is one blog', async () => {
+test('there are two blogs', async () => {
   const response = await api.get('/api/blogs')
 
   expect(response.body.length).toBe(initialBlogs.length)
@@ -53,7 +54,8 @@ test('a valid blog can be added', async () => {
   const newBlog = {
     author: 'kissa ja koira',
     likes: 100,
-    title: 'suomi elämä '
+    title: 'suomi elämä',
+    url: 'example.com'
   }
 
   await api
@@ -74,7 +76,8 @@ test('a valid blog can be added', async () => {
 test('default blog likes are zero', async () => {
   const newBlog = {
     author: 'siili',
-    title: 'talviuni'
+    title: 'talviuni',
+    url: 'example.com'
   }
 
   await api
@@ -87,6 +90,18 @@ test('default blog likes are zero', async () => {
   const contents = response.body.filter(r => r.author === 'siili')
   console.log(contents)
   expect(contents[0].likes).toBe(0)
+})
+
+test('blog title and url are required', async () => {
+  console.log(initialBlogs)
+  const newBlog = {
+    url: 'www.example.com',
+    author: 'siili'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 afterAll(() => {

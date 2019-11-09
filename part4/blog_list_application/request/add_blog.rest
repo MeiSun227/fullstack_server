@@ -2,8 +2,7 @@ POST  http://localhost:3003/api/blogs
 content-type: application/json
 
 {
-    "title": "Finlandcocos",
+   "title": "Finlandcocos",
    "author": "Maya",
-   "url": "www.cocos.com",
    "likes": "230"
 }
