@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const blogSchema = mongoose.Schema({
   title: {
@@ -13,6 +14,10 @@ const blogSchema = mongoose.Schema({
   likes: {
     type: Number,
     default: 0
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
 
@@ -24,4 +29,6 @@ blogSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model('Blog', blogSchema)
+blogSchema.plugin(uniqueValidator)
+const Blog = mongoose.model('Blog', blogSchema)
+module.exports = Blog

@@ -2,8 +2,16 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
 
 const api = supertest(app)
+
+const initialUser = {
+  "username": "siilii",
+  "name": "Siili",
+  "password": "meimei"
+}
 
 const initialBlogs = [
   {
@@ -21,13 +29,33 @@ const initialBlogs = [
   }
 ]
 
+let userId = null
+let auth = null
+
 beforeEach(async () => {
+
+  await User.deleteMany({})
+
+  let userObject = await api
+    .post('/api/users')
+    .send(initialUser)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  const loginResponse = await api
+    .post('/api/login')
+    .set('Content-Type', 'application/json')
+    .send({username: initialUser.username, password: initialUser.password})
+    .expect(200)
+  auth = loginResponse.body.token
+
   await Blog.deleteMany({})
 
   let blogObject = new Blog(initialBlogs[0])
+  blogObject.userId = userId
   await blogObject.save()
 
   blogObject = new Blog(initialBlogs[1])
+  blogObject.userId = userId
   await blogObject.save()
 })
 
@@ -55,15 +83,18 @@ test('a valid blog can be added', async () => {
     author: 'kissa ja koira',
     likes: 100,
     title: 'suomi elämä',
-    url: 'example.com'
+    url: 'example.com',
+    user: userId
   }
-
+  console.log("First")
+  console.log(`Bearer ${auth}`)
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${auth}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
-
+  console.log("Second")
   const response = await api.get('/api/blogs')
   const contents = response.body.map(r => r.author)
 
